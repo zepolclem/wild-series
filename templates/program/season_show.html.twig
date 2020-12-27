@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}All programs
+{% block title %}All episodes
 {% endblock %}
 
 {% block body %}
@@ -15,10 +15,12 @@
 			</h1>
 			{% for episode in season.episodes %}
 				<div>
-					<h2>{{ loop.index }}
-						/
-						{{ episode.title }}
-					</h2>
+					<a href="{{ path("program_show_episode", { program_id: program.id, season_id: season.id, episode_id: episode.id})}}">
+						<h2>{{ loop.index }}
+							/
+							{{ episode.title }}
+						</h2>
+					</a>
 					<p>{{ episode.synopsis }}</p>
 				</div>
 			{% else %}
