@@ -27,3 +27,11 @@ php bin/console doctrine:query:sql 'INSERT INTO episode (id, number, title, syno
 (NULL, "2", "Cat s in the Bag", "After their first drug deal goes terribly wrong, Walt and Jesse are forced to deal with a corpse and a prisoner. Meanwhile, Skyler grows suspicious of Walt s activities.", 1),
 (NULL, "1", "Seven Thirty-Seven", "Walt and Jesse realize how dire their situation is. They must come up with a plan to kill Tuco before Tuco kills them first.", 2),
 (NULL, "2", "Grilled", "Walt s disappearance is met with investigation by both his wife and Hank, as Tuco Salamanca intends to leave town with his kidnapped cooks.", 2);'
+
+
+// ACTORS
+
+symfony console doctrine:query:sql 'INSERT INTO `actor` (`firstname`, `lastname`) VALUES ("Andrew", "Lincoln");'
+symfony console doctrine:query:sql 'INSERT INTO `actor` (`firstname`, `lastname`) VALUES ("Norman", "Reedus");'
+symfony console doctrine:query:sql 'INSERT INTO `actor` (`firstname`, `lastname`) VALUES ("Lauren", "Cohan");'
+symfony console doctrine:query:sql 'INSERT INTO `actor` (`firstname`, `lastname`) VALUES ("Danai", "Guerira");'
