@@ -15,7 +15,7 @@ class ActorType extends AbstractType
             ->add('lastname')
             ->add('firstname')
             ->add('birth_date')
-            ->add('programs')
+            ->add('programs', null, ['choice_label' => 'title'])
         ;
     }
 

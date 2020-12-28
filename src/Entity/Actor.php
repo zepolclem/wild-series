@@ -44,6 +44,11 @@ class Actor
         $this->programs = new ArrayCollection();
     }
 
+    public function getDisplayName(): ?string
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
