@@ -6,11 +6,12 @@ use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Form\ProgramType;
+use App\Service\Slugifer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/programs", name="program_")
@@ -26,13 +27,12 @@ class ProgramController extends AbstractController
         return $this->render('program/index.html.twig', ['programs' => $programs]);
     }
 
-
     /**
      * The controller for the Program add form
      *
      * @Route("/new", name="new")
      */
-    function new (Request $request): Response {
+    function new (Request $request, Slugifer $slugifer): Response {
         // create the Program object
         $program = new Program();
         // create the associated form
@@ -45,6 +45,10 @@ class ProgramController extends AbstractController
             // Deal with the submitted data
             // Get the Entity Manager
             $entityManager = $this->getDoctrine()->getManager();
+
+            $slug = $slugifer->generate($program->getTitle());
+            $program->setSlug($slug);
+
             // Persist Category Object
             $entityManager->persist($program);
             // Flush the persisted object
@@ -58,18 +62,17 @@ class ProgramController extends AbstractController
         ]);
     }
 
-
     /**
      * Getting a program
      *
-     * @Route("/{id<^[0-9]+$>}", name="show")
+     * @Route("/{slug<^[a-z]+(?:-[a-z]+)*$>}", name="show")
      * @return Response
      */
     public function show(program $program): Response
     {
-        // $program = $this->getDoctrine()->getRepository(Program::class)->findOneBy(['id' => $id]);
+        // $program = $this->getDoctrine()->getRepository(Program::class)->findOneBy(['slug' => $slug]);
         if (!$program) {
-            throw $this->createNotFoundException('No program with id : ' . $program->getId() . ' found in program\'s table.');
+            throw $this->createNotFoundException('No program with slug : ' . $program->getSlug() . ' found in program\'s table.');
         }
         return $this->render('program/show.html.twig', [
             'program' => $program,

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Program;
+use App\Service\Slugifer;
 use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -10,6 +11,12 @@ use Doctrine\Persistence\ObjectManager;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
+    private $slugifer;
+
+    public function __construct(Slugifer $slugifer)
+    {
+        $this->slugifer = $slugifer;
+    }
 
     public function getDependencies()
     {
@@ -49,6 +56,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         foreach (self::PROGRAMS as $title => $data) {
             $program = new Program();
             $program->setTitle($title);
+            $program->setSlug($this->slugifer->generate($title));
             $program->setSummary($data['summary']);
             $program->setCategory($this->getReference($data['category']));
             $manager->persist($program);
