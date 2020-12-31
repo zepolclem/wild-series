@@ -11,6 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -32,7 +34,7 @@ class ProgramController extends AbstractController
      *
      * @Route("/new", name="new")
      */
-    function new (Request $request, Slugifer $slugifer): Response {
+    function new (Request $request, Slugifer $slugifer, MailerInterface $mailer): Response {
         // create the Program object
         $program = new Program();
         // create the associated form
@@ -53,6 +55,13 @@ class ProgramController extends AbstractController
             $entityManager->persist($program);
             // Flush the persisted object
             $entityManager->flush();
+
+            $email = (new Email())
+                ->from($this->getParameter('mailer_from'))
+                ->to('lopez.clmnt@gmail.com')
+                ->subject('Test')
+                ->html('<p>Une nouvelle série vient d\'être publiée sur Wild Séries !</p>');
+            $mailer->send($email);
             // Finally redirect to categories list
             return $this->redirectToRoute('category_index');
         }
